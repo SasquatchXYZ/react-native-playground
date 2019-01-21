@@ -22,8 +22,6 @@ class Header extends Component {
   }
 }
 
-export default Header;
-
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 16,
@@ -41,3 +39,5 @@ const styles = StyleSheet.create({
     height: 50
   }
 });
+
+export default Header;
