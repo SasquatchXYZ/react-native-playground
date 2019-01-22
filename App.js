@@ -34,7 +34,8 @@ class App extends Component {
       value: "",
       items: [],
       dataSource: ds.cloneWithRows([]),
-      accessToken: null
+      accessToken: null,
+      idToken: null
     };
 
     this.setSource = this.setSource.bind(this);
@@ -69,7 +70,11 @@ class App extends Component {
       .then(credentials => {
         console.log(credentials);
         this.setState({
-          accessToken: credentials.accessToken
+          accessToken: credentials.accessToken,
+          idToken: credentials.idToken
+        }, () => {
+          console.log(this.state.accessToken);
+          console.log(this.state.idToken)
         })
       })
       .catch(err => console.log(err))
@@ -78,12 +83,18 @@ class App extends Component {
 
   handleLogout() {
     if (Platform.OS === 'android') {
-      this.setState({accessToken: null}, () => console.log('Logged Out', this.state.accessToken))
+      this.setState({
+        accessToken: null,
+        idToken: null
+      }, () => console.log('Logged Out', this.state.accessToken, this.state.idToken))
     } else {
       auth0.webAuth
         .clearSession({})
         .then(success => {
-          this.setState({accessToken: null}, () => console.log('Logged Out', this.state.accessToken))
+          this.setState({
+            accessToken: null,
+            idToken: null
+          }, () => console.log('Logged Out', this.state.accessToken, this.state.idToken))
         })
         .catch(err => console.log(err))
     }
