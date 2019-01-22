@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, ActivityIndicator, Platform, ListView, Keyboard, AsyncStorage} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator, Platform, ListView, FlatList, Keyboard, AsyncStorage} from 'react-native';
 import Header from './components/header';
 import Footer from './components/footer';
 import Row from './components/row';
+import ListItem from 'react-native/local-cli/templates/HelloNavigation/components/ListItem';
 
 const filterItems = (filter, items) => {
   return items.filter(item => {
@@ -141,7 +142,7 @@ class App extends Component {
           onToggleAllComplete={this.handleToggleAllComplete}
         />
         <View style={styles.content}>
-          <ListView
+          <ListItem
             style={styles.list}
             enableEmptySections
             dataSource={this.state.dataSource}
