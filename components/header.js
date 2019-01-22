@@ -17,6 +17,9 @@ class Header extends Component {
           returnKeyType="done"
           style={styles.input}
         />
+        <TouchableOpacity onPress={this.props.onLogin}>
+          <Text>Login</Text>
+        </TouchableOpacity>
       </View>
     )
   }

@@ -3,7 +3,18 @@ import {View, Text, StyleSheet, ActivityIndicator, Platform, ListView, FlatList,
 import Header from './components/header';
 import Footer from './components/footer';
 import Row from './components/row';
-import ListItem from 'react-native/local-cli/templates/HelloNavigation/components/ListItem';
+// import Auth0 from 'react-native-auth0';
+import Config from 'react-native-config';
+
+console.log(Config.domain);
+console.log(Config.clientId);
+
+/*const auth0 = new Auth0({
+  domain: Config.domain,
+  clientId: Config.clientId
+});*/
+
+// console.log(auth0);
 
 const filterItems = (filter, items) => {
   return items.filter(item => {
@@ -27,6 +38,7 @@ class App extends Component {
     };
 
     this.setSource = this.setSource.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
     this.handleUpdateText = this.handleUpdateText.bind(this);
     this.handleToggleEditing = this.handleToggleEditing.bind(this);
     this.handleClearComplete = this.handleClearComplete.bind(this);
@@ -44,6 +56,11 @@ class App extends Component {
     });
     AsyncStorage.setItem('items', JSON.stringify(items))
   }
+
+  handleLogin() {
+    return console.log('Login!');
+  }
+
 
   handleUpdateText(key, text) {
     const newItems = this.state.items.map(item => {
@@ -140,9 +157,10 @@ class App extends Component {
           onAddItem={this.handleAddItem}
           onChange={value => this.setState({value})}
           onToggleAllComplete={this.handleToggleAllComplete}
+          onLogin={this.handleLogin}
         />
         <View style={styles.content}>
-          <ListItem
+          <ListView
             style={styles.list}
             enableEmptySections
             dataSource={this.state.dataSource}
