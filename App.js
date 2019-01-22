@@ -3,18 +3,17 @@ import {View, Text, StyleSheet, ActivityIndicator, Platform, ListView, FlatList,
 import Header from './components/header';
 import Footer from './components/footer';
 import Row from './components/row';
-// import Auth0 from 'react-native-auth0';
-import Config from 'react-native-config';
+import Auth0 from 'react-native-auth0';
+import {DOMAIN, CLIENT_ID} from 'react-native-dotenv';
 
-console.log(Config.domain);
-console.log(Config.clientId);
+// console.log(DOMAIN, CLIENT_ID);
 
-/*const auth0 = new Auth0({
-  domain: Config.domain,
-  clientId: Config.clientId
-});*/
+const auth0 = new Auth0({
+  domain: DOMAIN,
+  clientId: CLIENT_ID
+});
 
-// console.log(auth0);
+console.log(auth0);
 
 const filterItems = (filter, items) => {
   return items.filter(item => {
@@ -34,11 +33,13 @@ class App extends Component {
       filter: "ALL",
       value: "",
       items: [],
-      dataSource: ds.cloneWithRows([])
+      dataSource: ds.cloneWithRows([]),
+      accessToken: null
     };
 
     this.setSource = this.setSource.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
     this.handleUpdateText = this.handleUpdateText.bind(this);
     this.handleToggleEditing = this.handleToggleEditing.bind(this);
     this.handleClearComplete = this.handleClearComplete.bind(this);
@@ -57,11 +58,39 @@ class App extends Component {
     AsyncStorage.setItem('items', JSON.stringify(items))
   }
 
+  // -------------------------------------------------------------------------------------------------------------------
   handleLogin() {
-    return console.log('Login!');
+
+    auth0.webAuth
+      .authorize({
+        scope: 'openid profile email',
+        audience: `https://${DOMAIN}/userinfo`
+      })
+      .then(credentials => {
+        console.log(credentials);
+        this.setState({
+          accessToken: credentials.accessToken
+        })
+      })
+      .catch(err => console.log(err))
+
+  }
+
+  handleLogout() {
+    if (Platform.OS === 'android') {
+      this.setState({accessToken: null}, () => console.log('Logged Out', this.state.accessToken))
+    } else {
+      auth0.webAuth
+        .clearSession({})
+        .then(success => {
+          this.setState({accessToken: null}, () => console.log('Logged Out', this.state.accessToken))
+        })
+        .catch(err => console.log(err))
+    }
   }
 
 
+  // -------------------------------------------------------------------------------------------------------------------
   handleUpdateText(key, text) {
     const newItems = this.state.items.map(item => {
       if (item.key !== key) return item;
@@ -150,6 +179,7 @@ class App extends Component {
   }
 
   render() {
+    let loggedIn = this.state.accessToken !== null;
     return (
       <View style={styles.container}>
         <Header
@@ -157,7 +187,8 @@ class App extends Component {
           onAddItem={this.handleAddItem}
           onChange={value => this.setState({value})}
           onToggleAllComplete={this.handleToggleAllComplete}
-          onLogin={this.handleLogin}
+          onLog={loggedIn ? this.handleLogout : this.handleLogin}
+          btnTitle={loggedIn ? 'Logout' : 'Login'}
         />
         <View style={styles.content}>
           <ListView
