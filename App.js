@@ -13,7 +13,13 @@ const auth0 = new Auth0({
   clientId: CLIENT_ID
 });
 
-console.log(auth0);
+// console.log(auth0);
+
+const parseJwt = (token)  => {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace('-', '+').replace('_', '/');
+  return JSON.parse(window.atob(base64));
+};
 
 const filterItems = (filter, items) => {
   return items.filter(item => {
@@ -35,7 +41,9 @@ class App extends Component {
       items: [],
       dataSource: ds.cloneWithRows([]),
       accessToken: null,
-      idToken: null
+      idToken: null,
+      userName: null,
+      userEmail: null
     };
 
     this.setSource = this.setSource.bind(this);
@@ -69,12 +77,18 @@ class App extends Component {
       })
       .then(credentials => {
         console.log(credentials);
+        const user = parseJwt(credentials.idToken);
+        console.log(user);
+
         this.setState({
           accessToken: credentials.accessToken,
-          idToken: credentials.idToken
+          idToken: credentials.idToken,
+          userName: user.name,
+          userEmail: user.email
         }, () => {
           console.log(this.state.accessToken);
-          console.log(this.state.idToken)
+          console.log(this.state.userName);
+          console.log(this.state.userEmail)
         })
       })
       .catch(err => console.log(err))
@@ -85,16 +99,20 @@ class App extends Component {
     if (Platform.OS === 'android') {
       this.setState({
         accessToken: null,
-        idToken: null
-      }, () => console.log('Logged Out', this.state.accessToken, this.state.idToken))
+        idToken: null,
+        userName: null,
+        userEmail: null
+      }, () => console.log('Logged Out', this.state.accessToken, this.state.userName))
     } else {
       auth0.webAuth
         .clearSession({})
         .then(success => {
           this.setState({
             accessToken: null,
-            idToken: null
-          }, () => console.log('Logged Out', this.state.accessToken, this.state.idToken))
+            idToken: null,
+            userName: null,
+            userEmail: null
+          }, () => console.log('Logged Out', this.state.accessToken, this.state.userName))
         })
         .catch(err => console.log(err))
     }
