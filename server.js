@@ -1,9 +1,11 @@
 const express = require('express');
-const app = express();
-const PORT = process.env || 3000;
+const routes = require('./routes');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 mongoose.set('useCreateIndex', true);
+
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Middleware ---------------------------------------------------------
 app.use(bodyParser.urlencoded({extended: true}));

@@ -5,6 +5,7 @@ import Footer from './components/footer';
 import Row from './components/row';
 import Auth0 from 'react-native-auth0';
 import {DOMAIN, CLIENT_ID} from 'react-native-dotenv';
+import API from './utils/API';
 
 // console.log(DOMAIN, CLIENT_ID);
 
