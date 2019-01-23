@@ -81,7 +81,17 @@ class App extends Component {
 
         API.getUser(credentials.accessToken)
           .then(res => {
-            console.log(res)
+            console.log(res.data);
+            this.setState({
+              accessToken: credentials.accessToken,
+              idToken: credentials.idToken,
+              userName: res.data.name,
+              userEmail: res.data.email
+            }, () => {
+              console.log(this.state.accessToken);
+              console.log(this.state.userName);
+              console.log(this.state.userEmail)
+            })
           })
           .catch(err => console.log(err))
 
