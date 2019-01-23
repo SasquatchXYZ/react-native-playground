@@ -78,7 +78,15 @@ class App extends Component {
       })
       .then(credentials => {
         console.log(credentials);
-        const user = parseJwt(credentials.idToken);
+
+        API.getUser(credentials.accessToken)
+          .then(res => {
+            console.log(res)
+          })
+          .catch(err => console.log(err))
+
+
+        /*const user = parseJwt(credentials.idToken);
         console.log(user);
 
         this.setState({
@@ -90,7 +98,7 @@ class App extends Component {
           console.log(this.state.accessToken);
           console.log(this.state.userName);
           console.log(this.state.userEmail)
-        })
+        })*/
       })
       .catch(err => console.log(err))
 
