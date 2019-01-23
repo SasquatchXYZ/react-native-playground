@@ -1,0 +1,39 @@
+{
+  "name": "react-native-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-ios": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev-ios",
+    "start-android": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev-android",
+    "start:prod": "node server.js",
+    "start:dev-ios": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client-ios\"",
+    "start:dev-android": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client-android\"",
+    "client-ios": "cd client && react-native run-ios",
+    "client-android": "cd client && react-native run-android",
+    "postinstall": "cd client && npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SasquatchXYZ/react-native-playground.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SasquatchXYZ/react-native-playground/issues"
+  },
+  "homepage": "https://github.com/SasquatchXYZ/react-native-playground#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "if-env": "^1.0.4",
+    "mongoose": "^5.4.6"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.9"
+  }
+}
