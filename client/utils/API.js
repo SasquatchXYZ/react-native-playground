@@ -3,12 +3,12 @@ import {DOMAIN} from 'react-native-dotenv';
 import {LOCAL_IP} from 'react-native-dotenv';
 import {Platform} from 'react-native';
 
-// console.log(Platform.OS);
+console.log(Platform.OS);
 const DEV_SERVER_URL = Platform.OS === 'android'
   ? LOCAL_IP
   : 'localhost';
 
-// console.log(DEV_SERVER_URL);
+console.log(DEV_SERVER_URL);
 
 
 export default {
